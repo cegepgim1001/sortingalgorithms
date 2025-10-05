@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; media-src 'self' blob:;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Sorting Algorithms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        /* Flip card styles */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        /* Syntax highlighting */
+        pre code .keyword { color: #be123c; /* rose-700 */ font-weight: 500;}
+        pre code .comment { color: #475569; /* slate-600 */ }
+        pre code .function { color: #1d4ed8; /* blue-700 */ }
+        pre code .string { color: #059669; /* emerald-600 */ }
+        pre code .number { color: #ea580c; /* orange-600 */ }
+
+        /* Animation container styles */
+        .bar-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 250px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f8fafc; /* slate-50 */
+            gap: 4px;
+        }
+        .bar {
+            width: 30px;
+            background-color: #64748b; /* slate-500 */
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+            color: white;
+            padding-top: 5px;
+            border-radius: 4px 4px 0 0;
+            font-weight: 600;
+        }
+        .bar-comparing { background-color: #f59e0b; } /* amber-500 */
+        .bar-swap { background-color: #ef4444; } /* red-500 */
+        .bar-sorted { background-color: #22c55e; } /* green-500 */
+        .bar-pivot { background-color: #8b5cf6; } /* violet-500 */
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-slate-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Sorting Algorithms: An Interactive Guide</h1>
+            <nav class="hidden md:flex space-x-4">
+                <a href="#intro" class="hover:text-sky-300">Introduction</a>
+                <a href="#basic" class="hover:text-sky-300">Basic Sorts</a>
+                <a href="#efficiency" class="hover:text-sky-300">Efficiency</a>
+                <a href="#advanced" class="hover:text-sky-300">Advanced Sorts</a>
+                <a href="#challenge" class="hover:text-sky-300">Challenge</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Introduction Section -->
+        <section id="intro" class="mb-16">
+            <h2 class="text-4xl font-bold text-slate-900 mb-4 border-b-4 border-sky-500 pb-2">Introduction</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                 <video class="w-full rounded-md" controls autoplay muted loop src="1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <p class="text-lg text-slate-700">
+                A sorting algorithm is a fundamental concept in computer science used to rearrange items in a collection (like a list of numbers) into a specific order, usually numerical or alphabetical. This guide will walk you through the most common sorting algorithms, from the simple to the advanced, using interactive examples and visualizations to make the concepts clear.
+            </p>
+        </section>
+
+        <!-- Basic Algorithms Section -->
+        <section id="basic" class="mb-16">
+            <h2 class="text-4xl font-bold text-slate-900 mb-6 border-b-4 border-sky-500 pb-2">Module 1: The Basic Sorting Algorithms</h2>
+            <div class="space-y-12">
+                <!-- Bubble Sort -->
+                <div id="bubble-sort" class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-3xl font-bold text-sky-700 mb-4">1. Bubble Sort</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <video class="w-full rounded-md" controls autoplay muted loop src="2.mp4" type="video/mp4">
+                           Your browser does not support the video tag.
+                       </video>
+                   </div>
+                    <p class="mb-4">The main idea is to repeatedly step through the list, compare adjacent elements, and swap them if they're in the wrong order. This process "bubbles" the largest elements to the end of the list.</p>
+                    
+                    <div class="bg-slate-100 p-4 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2">Live Visualization</h4>
+                        <div class="bar-container" id="vis-bubble-sort"></div>
+                        <div class="flex justify-center items-center space-x-2 mt-4">
+                            <button onclick="startAnimation('bubbleSort')" class="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700">Play</button>
+                            <button onclick="resetAnimation('bubbleSort')" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600">Reset</button>
+                        </div>
+                        <p id="desc-bubble-sort" class="text-center mt-2 text-slate-600 font-mono h-6"></p>
+                    </div>
+
+                    <h4 class="text-xl font-semibold mt-6 mb-4">Step-by-Step Walkthrough: Sorting `[5, 1, 4, 2]`</h4>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Pass 1 -->
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-sky-500 text-white shadow-md"><p class="font-bold">Pass 1, Step 1</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-sky-100 text-sky-900 shadow-md"><p class="font-semibold">Q: What's the first pair?</p><p>A: Compare `5` and `1`. Since 5 > 1, swap. List becomes `[1, 5, 4, 2]`.</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-sky-500 text-white shadow-md"><p class="font-bold">Pass 1, Step 2</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-sky-100 text-sky-900 shadow-md"><p class="font-semibold">Q: Next pair?</p><p>A: Compare `5` and `4`. Since 5 > 4, swap. List becomes `[1, 4, 5, 2]`.</p></div>
+                            </div>
+                        </div>
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-sky-500 text-white shadow-md"><p class="font-bold">Pass 1, Step 3</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-sky-100 text-sky-900 shadow-md"><p class="font-semibold">Q: Final pair?</p><p>A: Compare `5` and `2`. Since 5 > 2, swap. List becomes `[1, 4, 2, 5]`.</p></div>
+                            </div>
+                        </div>
+                        <!-- Pass 2 -->
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-emerald-500 text-white shadow-md"><p class="font-bold">Pass 2, Step 1</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-emerald-100 text-emerald-900 shadow-md"><p class="font-semibold">Q: First pair?</p><p>A: Compare `1` and `4`. No swap. List is `[1, 4, 2, 5]`.</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-emerald-500 text-white shadow-md"><p class="font-bold">Pass 2, Step 2</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-emerald-100 text-emerald-900 shadow-md"><p class="font-semibold">Q: Next pair?</p><p>A: Compare `4` and `2`. Since 4 > 2, swap. List becomes `[1, 2, 4, 5]`.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-xl font-semibold mt-6 mb-2">Python Code</h4>
+                    <div class="relative">
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code id="code-bubble-sort"><span class="keyword">def</span> <span class="function">bubble_sort</span>(arr):
+    n = <span class="function">len</span>(arr)
+    <span class="comment"># Outer loop for each pass</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(n):
+        <span class="comment"># Inner loop for comparisons</span>
+        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, n - i - <span class="number">1</span>):
+            <span class="keyword">if</span> arr[j] > arr[j + <span class="number">1</span>]:
+                <span class="comment"># Python's tuple swapping</span>
+                arr[j], arr[j + <span class="number">1</span>] = arr[j + <span class="number">1</span>], arr[j]
+    <span class="keyword">return</span> arr
+</code></pre>
+                        <button onclick="copyCode('code-bubble-sort')" class="absolute top-2 right-2 bg-slate-600 text-white px-3 py-1 rounded-md text-sm hover:bg-slate-500">Copy</button>
+                    </div>
+                </div>
+
+                <!-- Selection Sort -->
+                <div id="selection-sort" class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-3xl font-bold text-sky-700 mb-4">2. Selection Sort</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <video class="w-full rounded-md" controls autoplay muted loop src="3.mp4" type="video/mp4">
+                           Your browser does not support the video tag.
+                       </video>
+                   </div>
+                    <p class="mb-4">This method repeatedly finds the <strong>smallest element</strong> from the unsorted part of the list and swaps it to the beginning of the unsorted section.</p>
+                     <div class="bg-slate-100 p-4 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2">Live Visualization</h4>
+                        <div class="bar-container" id="vis-selection-sort"></div>
+                        <div class="flex justify-center items-center space-x-2 mt-4">
+                            <button onclick="startAnimation('selectionSort')" class="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700">Play</button>
+                            <button onclick="resetAnimation('selectionSort')" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600">Reset</button>
+                        </div>
+                         <p id="desc-selection-sort" class="text-center mt-2 text-slate-600 font-mono h-6"></p>
+                    </div>
+                    <h4 class="text-xl font-semibold mt-6 mb-4">Step-by-Step Walkthrough: Sorting `[5, 1, 4, 2]`</h4>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-sky-500 text-white shadow-md"><p class="font-bold">Pass 1</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-sky-100 text-sky-900 shadow-md"><p class="font-semibold">Q: Smallest in `[5,1,4,2]`?</p><p>A: It's `1`. Swap with `5`. List becomes `[1, 5, 4, 2]`.</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-emerald-500 text-white shadow-md"><p class="font-bold">Pass 2</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-emerald-100 text-emerald-900 shadow-md"><p class="font-semibold">Q: Smallest in `[5,4,2]`?</p><p>A: It's `2`. Swap with `5`. List becomes `[1, 2, 4, 5]`.</p></div>
+                            </div>
+                        </div>
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-amber-500 text-white shadow-md"><p class="font-bold">Pass 3</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-amber-100 text-amber-900 shadow-md"><p class="font-semibold">Q: Smallest in `[4,5]`?</p><p>A: It's `4`. No swap needed. List is sorted!</p></div>
+                            </div>
+                        </div>
+                    </div>
+                     <h4 class="text-xl font-semibold mt-6 mb-2">Python Code</h4>
+                    <div class="relative">
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code id="code-selection-sort"><span class="keyword">def</span> <span class="function">selection_sort</span>(arr):
+    n = <span class="function">len</span>(arr)
+    <span class="comment"># Move boundary of unsorted subarray</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(n):
+        min_idx = i
+        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(i+<span class="number">1</span>, n):
+            <span class="keyword">if</span> arr[j] < arr[min_idx]:
+                min_idx = j
+        <span class="comment"># Swap the found minimum element</span>
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    <span class="keyword">return</span> arr
+</code></pre>
+                        <button onclick="copyCode('code-selection-sort')" class="absolute top-2 right-2 bg-slate-600 text-white px-3 py-1 rounded-md text-sm hover:bg-slate-500">Copy</button>
+                    </div>
+                </div>
+                
+                 <!-- Insertion Sort -->
+                <div id="insertion-sort" class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-3xl font-bold text-sky-700 mb-4">3. Insertion Sort</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <video class="w-full rounded-md" controls autoplay muted loop src="4.mp4" type="video/mp4">
+                           Your browser does not support the video tag.
+                       </video>
+                   </div>
+                    <p class="mb-4">This algorithm builds the final sorted list one item at a time, similar to how you might sort a hand of playing cards.</p>
+                     <div class="bg-slate-100 p-4 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2">Live Visualization</h4>
+                        <div class="bar-container" id="vis-insertion-sort"></div>
+                        <div class="flex justify-center items-center space-x-2 mt-4">
+                            <button onclick="startAnimation('insertionSort')" class="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700">Play</button>
+                            <button onclick="resetAnimation('insertionSort')" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600">Reset</button>
+                        </div>
+                         <p id="desc-insertion-sort" class="text-center mt-2 text-slate-600 font-mono h-6"></p>
+                    </div>
+                    <h4 class="text-xl font-semibold mt-6 mb-4">Step-by-Step Walkthrough: Sorting `[5, 1, 4, 2]`</h4>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-sky-500 text-white shadow-md"><p class="font-bold">Step 1</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-sky-100 text-sky-900 shadow-md"><p class="font-semibold">Q: Insert `1` into `[5]`</p><p>A: `1` is smaller than `5`, so it goes before. List becomes `[1, 5, 4, 2]`.</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-emerald-500 text-white shadow-md"><p class="font-bold">Step 2</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-emerald-100 text-emerald-900 shadow-md"><p class="font-semibold">Q: Insert `4` into `[1,5]`</p><p>A: `4` goes between `1` and `5`. List becomes `[1, 4, 5, 2]`.</p></div>
+                            </div>
+                        </div>
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-amber-500 text-white shadow-md"><p class="font-bold">Step 3</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-amber-100 text-amber-900 shadow-md"><p class="font-semibold">Q: Insert `2` into `[1,4,5]`</p><p>A: `2` goes between `1` and `4`. List becomes `[1, 2, 4, 5]`.</p></div>
+                            </div>
+                        </div>
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-rose-500 text-white shadow-md"><p class="font-bold">Done!</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-rose-100 text-rose-900 shadow-md"><p>The list is now fully sorted!</p></div>
+                            </div>
+                        </div>
+                    </div>
+                     <h4 class="text-xl font-semibold mt-6 mb-2">Python Code</h4>
+                    <div class="relative">
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code id="code-insertion-sort"><span class="keyword">def</span> <span class="function">insertion_sort</span>(arr):
+    <span class="comment"># Traverse through 1 to len(arr)</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="function">len</span>(arr)):
+        key = arr[i]
+        j = i - <span class="number">1</span>
+        <span class="comment"># Move elements of arr[0..i-1] that are greater than key</span>
+        <span class="keyword">while</span> j >= <span class="number">0</span> <span class="keyword">and</span> key < arr[j]:
+            arr[j + <span class="number">1</span>] = arr[j]
+            j -= <span class="number">1</span>
+        arr[j + <span class="number">1</span>] = key
+    <span class="keyword">return</span> arr
+</code></pre>
+                        <button onclick="copyCode('code-insertion-sort')" class="absolute top-2 right-2 bg-slate-600 text-white px-3 py-1 rounded-md text-sm hover:bg-slate-500">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Efficiency Section -->
+        <section id="efficiency" class="mb-16">
+            <h2 class="text-4xl font-bold text-slate-900 mb-6 border-b-4 border-violet-500 pb-2">Module 2: Algorithm Efficiency (Big O Notation)</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                <video class="w-full rounded-md" controls autoplay muted loop src="5.mp4" type="video/mp4">
+                   Your browser does not support the video tag.
+               </video>
+           </div>
+            <p class="text-lg text-slate-700 mb-6">Big O notation is a way to describe how the runtime of an algorithm grows as the size of the input list (n) grows. It's crucial for understanding why some algorithms are better than others for large datasets.</p>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold text-violet-700 mb-4">Complexity Growth Chart</h3>
+                <!-- SVG Chart for Big O -->
+                <div class="p-4 bg-slate-50 rounded-lg">
+                    <svg viewBox="0 0 500 300" class="w-full h-auto">
+                        <line x1="40" y1="260" x2="480" y2="260" stroke="#94a3b8" stroke-width="2"></line>
+                        <line x1="40" y1="260" x2="40" y2="20" stroke="#94a3b8" stroke-width="2"></line>
+                        <text x="250" y="290" text-anchor="middle" fill="#475569">Input Size (n)</text>
+                        <text x="15" y="150" transform="rotate(-90 15,150)" text-anchor="middle" fill="#475569">Time</text>
+                        <!-- O(n^2) -->
+                        <path d="M 40 258 C 150 250, 250 150, 480 30" stroke="#ef4444" fill="none" stroke-width="3"></path>
+                        <text x="440" y="30" fill="#ef4444" font-weight="bold">O(n²)</text>
+                        <!-- O(n log n) -->
+                        <path d="M 40 258 C 150 240, 250 200, 480 150" stroke="#f59e0b" fill="none" stroke-width="3"></path>
+                        <text x="440" y="145" fill="#f59e0b" font-weight="bold">O(n log n)</text>
+                        <!-- O(n) -->
+                        <path d="M 40 258 L 480 190" stroke="#22c55e" fill="none" stroke-width="3"></path>
+                        <text x="440" y="185" fill="#22c55e" font-weight="bold">O(n)</text>
+                        <!-- O(log n) -->
+                        <path d="M 40 258 C 150 250, 250 240, 480 230" stroke="#3b82f6" fill="none" stroke-width="3"></path>
+                        <text x="440" y="225" fill="#3b82f6" font-weight="bold">O(log n)</text>
+                        <!-- O(1) -->
+                        <path d="M 40 258 L 480 258" stroke="#8b5cf6" fill="none" stroke-width="3"></path>
+                        <text x="440" y="253" fill="#8b5cf6" font-weight="bold">O(1)</text>
+                    </svg>
+                </div>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+                     <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-rose-500 text-white shadow-md"><p class="font-bold">O(n²)</p><p>Quadratic Time</p><span class="text-sm">(Click to reveal)</span></div>
+                            <div class="flip-card-back bg-rose-100 text-rose-900 shadow-md"><p class="font-semibold">Why is it inefficient?</p><p>If input doubles, time quadruples (2²=4). Very slow for large lists. (Bubble, Selection, Insertion Sort)</p></div>
+                        </div>
+                    </div>
+                     <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-amber-500 text-white shadow-md"><p class="font-bold">O(n)</p><p>Linear Time</p><span class="text-sm">(Click to reveal)</span></div>
+                            <div class="flip-card-back bg-amber-100 text-amber-900 shadow-md"><p class="font-semibold">What does it mean?</p><p>Runtime grows in direct proportion to input size. Considered very efficient. (e.g., Simple Search)</p></div>
+                        </div>
+                    </div>
+                    <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-blue-500 text-white shadow-md"><p class="font-bold">O(log n)</p><p>Logarithmic Time</p><span class="text-sm">(Click to reveal)</span></div>
+                            <div class="flip-card-back bg-blue-100 text-blue-900 shadow-md"><p class="font-semibold">What does it mean?</p><p>Runtime grows very slowly. Extremely fast for huge datasets. (e.g., Binary Search)</p></div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Advanced Algorithms Section -->
+        <section id="advanced" class="mb-16">
+            <h2 class="text-4xl font-bold text-slate-900 mb-6 border-b-4 border-rose-500 pb-2">Module 3: Advanced Sorting Algorithms</h2>
+             <div class="space-y-12">
+                 <!-- Merge Sort -->
+                <div id="merge-sort" class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-3xl font-bold text-rose-700 mb-4">4. Merge Sort</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <video class="w-full rounded-md" controls autoplay muted loop src="6.mp4" type="video/mp4">
+                           Your browser does not support the video tag.
+                       </video>
+                   </div>
+                    <p class="mb-4">Merge Sort is a highly efficient algorithm that uses a "Divide and Conquer" strategy. It breaks the list down into single-item lists and then merges them back together in a sorted manner.</p>
+                     <div class="bg-slate-100 p-4 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2">Live Visualization</h4>
+                        <div class="bar-container" id="vis-merge-sort"></div>
+                        <div class="flex justify-center items-center space-x-2 mt-4">
+                            <button onclick="startAnimation('mergeSort')" class="bg-rose-600 text-white px-4 py-2 rounded-md hover:bg-rose-700">Play</button>
+                            <button onclick="resetAnimation('mergeSort')" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600">Reset</button>
+                        </div>
+                         <p id="desc-merge-sort" class="text-center mt-2 text-slate-600 font-mono h-6"></p>
+                    </div>
+                    <h4 class="text-xl font-semibold mt-6 mb-4">Step-by-Step Walkthrough: Sorting `[5, 1, 4, 2]`</h4>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-rose-500 text-white shadow-md"><p class="font-bold">Step 1: Divide</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-rose-100 text-rose-900 shadow-md"><p class="font-semibold">How do we divide?</p><p>Split `[5,1,4,2]` into `[5,1]` & `[4,2]`. Then split again into `[5]`, `[1]`, `[4]`, `[2]`.</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-indigo-500 text-white shadow-md"><p class="font-bold">Step 2: Conquer</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-indigo-100 text-indigo-900 shadow-md"><p class="font-semibold">How do we merge?</p><p>Merge `[5]` & `[1]` -> `[1,5]`. Merge `[4]` & `[2]` -> `[2,4]`.</p></div>
+                            </div>
+                        </div>
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-teal-500 text-white shadow-md"><p class="font-bold">Step 3: Final Merge</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-teal-100 text-teal-900 shadow-md"><p class="font-semibold">Last step?</p><p>Merge `[1,5]` & `[2,4]` to get the final sorted list: `[1,2,4,5]`.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                     <h4 class="text-xl font-semibold mt-6 mb-2">Python Code</h4>
+                    <div class="relative">
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code id="code-merge-sort"><span class="keyword">def</span> <span class="function">merge_sort</span>(arr):
+    <span class="keyword">if</span> <span class="function">len</span>(arr) > <span class="number">1</span>:
+        mid = <span class="function">len</span>(arr) // <span class="number">2</span>
+        L = arr[:mid]
+        R = arr[mid:]
+        <span class="function">merge_sort</span>(L)
+        <span class="function">merge_sort</span>(R)
+        i = j = k = <span class="number">0</span>
+        <span class="keyword">while</span> i < <span class="function">len</span>(L) <span class="keyword">and</span> j < <span class="function">len</span>(R):
+            <span class="keyword">if</span> L[i] < R[j]:
+                arr[k] = L[i]
+                i += <span class="number">1</span>
+            <span class="keyword">else</span>:
+                arr[k] = R[j]
+                j += <span class="number">1</span>
+            k += <span class="number">1</span>
+        <span class="keyword">while</span> i < <span class="function">len</span>(L):
+            arr[k] = L[i]
+            i += <span class="number">1</span>
+            k += <span class="number">1</span>
+        <span class="keyword">while</span> j < <span class="function">len</span>(R):
+            arr[k] = R[j]
+            j += <span class="number">1</span>
+            k += <span class="number">1</span>
+</code></pre>
+                        <button onclick="copyCode('code-merge-sort')" class="absolute top-2 right-2 bg-slate-600 text-white px-3 py-1 rounded-md text-sm hover:bg-slate-500">Copy</button>
+                    </div>
+                </div>
+
+                <!-- Quick Sort -->
+                <div id="quick-sort" class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-3xl font-bold text-rose-700 mb-4">5. Quick Sort</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                        <video class="w-full rounded-md" controls autoplay muted loop src="7.mp4" type="video/mp4">
+                           Your browser does not support the video tag.
+                       </video>
+                   </div>
+                    <p class="mb-4">Quick Sort also uses "Divide and Conquer". It works by selecting a 'pivot' element and partitioning the other elements into two sub-arrays according to whether they are less than or greater than the pivot.</p>
+                     <div class="bg-slate-100 p-4 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-2">Live Visualization</h4>
+                        <div class="bar-container" id="vis-quick-sort"></div>
+                        <div class="flex justify-center items-center space-x-2 mt-4">
+                            <button onclick="startAnimation('quickSort')" class="bg-rose-600 text-white px-4 py-2 rounded-md hover:bg-rose-700">Play</button>
+                            <button onclick="resetAnimation('quickSort')" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600">Reset</button>
+                        </div>
+                         <p id="desc-quick-sort" class="text-center mt-2 text-slate-600 font-mono h-6"></p>
+                    </div>
+                    <h4 class="text-xl font-semibold mt-6 mb-4">Step-by-Step Walkthrough: Sorting `[5, 1, 4, 2]`</h4>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-rose-500 text-white shadow-md"><p class="font-bold">Step 1: Pivot & Partition</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-rose-100 text-rose-900 shadow-md"><p class="font-semibold">Q: Pick pivot `2`</p><p>A: Partition list. Smaller: `[1]`. Larger: `[5,4]`. Result: `[1, 2, 5, 4]`</p></div>
+                            </div>
+                        </div>
+                        <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-indigo-500 text-white shadow-md"><p class="font-bold">Step 2: Recurse</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-indigo-100 text-indigo-900 shadow-md"><p class="font-semibold">Q: Sort partitions</p><p>A: `[1]` is sorted. Sort `[5,4]` -> `[4,5]`. </p></div>
+                            </div>
+                        </div>
+                         <div class="flip-card h-48" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-teal-500 text-white shadow-md"><p class="font-bold">Step 3: Combine</p><span class="text-sm">(Click to reveal)</span></div>
+                                <div class="flip-card-back bg-teal-100 text-teal-900 shadow-md"><p class="font-semibold">Q: Final result?</p><p>A: Combine `[1]` + pivot `2` + `[4,5]` -> `[1,2,4,5]`.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                     <h4 class="text-xl font-semibold mt-6 mb-2">Python Code</h4>
+                    <div class="relative">
+                        <pre class="bg-slate-800 text-white p-4 rounded-md overflow-x-auto"><code id="code-quick-sort"><span class="keyword">def</span> <span class="function">quick_sort</span>(arr):
+    <span class="keyword">if</span> <span class="function">len</span>(arr) <= <span class="number">1</span>:
+        <span class="keyword">return</span> arr
+    <span class="keyword">else</span>:
+        pivot = arr.pop()
+        items_lower = []
+        items_greater = []
+        <span class="keyword">for</span> item <span class="keyword">in</span> arr:
+            <span class="keyword">if</span> item > pivot:
+                items_greater.append(item)
+            <span class="keyword">else</span>:
+                items_lower.append(item)
+        <span class="keyword">return</span> <span class="function">quick_sort</span>(items_lower) + [pivot] + <span class="function">quick_sort</span>(items_greater)
+</code></pre>
+                        <button onclick="copyCode('code-quick-sort')" class="absolute top-2 right-2 bg-slate-600 text-white px-3 py-1 rounded-md text-sm hover:bg-slate-500">Copy</button>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <!-- Challenge Section -->
+        <section id="challenge">
+            <h2 class="text-4xl font-bold text-slate-900 mb-6 border-b-4 border-emerald-500 pb-2">Final Challenge</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                <video class="w-full rounded-md" controls autoplay muted loop src="8.mp4" type="video/mp4">
+                   Your browser does not support the video tag.
+               </video>
+           </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                <h3 class="text-2xl font-bold text-emerald-700 mb-2">Test Your Knowledge!</h3>
+                <p class="text-lg mb-4">The best way to solidify your understanding is to practice. Try to write the Python code for each of the five algorithms from scratch, without looking at the examples.</p>
+                <p class="text-xl font-mono bg-slate-100 p-4 rounded-md inline-block">Use this list to test your code: <strong class="text-emerald-800">[8, 3, 5, 4, 7, 2, 1]</strong></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <p>&copy; 2025 Interactive Learning Module. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+    // --- ANIMATION ENGINE ---
+    const originalArray = [5, 1, 4, 2, 8, 3, 7, 6]; 
+    let animationState = {};
+
+    function getAlgorithmSteps(algoName, arr) {
+        const steps = [];
+        const array = [...arr];
+
+        switch (algoName) {
+            case 'bubbleSort':
+                for (let i = 0; i < array.length; i++) {
+                    for (let j = 0; j < array.length - i - 1; j++) {
+                        steps.push({ type: 'compare', indices: [j, j + 1], desc: `Comparing ${array[j]} and ${array[j+1]}` });
+                        if (array[j] > array[j + 1]) {
+                            steps.push({ type: 'swap', indices: [j, j + 1], desc: `Swapping ${array[j]} and ${array[j+1]}` });
+                            [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                        }
+                    }
+                    steps.push({ type: 'sorted', indices: [array.length - 1 - i], desc: `${array[array.length - 1 - i]} is sorted` });
+                }
+                break;
+            
+            case 'selectionSort':
+                for (let i = 0; i < array.length; i++) {
+                    let minIdx = i;
+                    for (let j = i + 1; j < array.length; j++) {
+                        steps.push({ type: 'compare', indices: [minIdx, j], desc: `Comparing min (${array[minIdx]}) with ${array[j]}` });
+                        if (array[j] < array[minIdx]) {
+                            minIdx = j;
+                        }
+                    }
+                    steps.push({ type: 'swap', indices: [i, minIdx], desc: `Swapping ${array[i]} with min ${array[minIdx]}` });
+                    [array[i], array[minIdx]] = [array[minIdx], array[i]];
+                    steps.push({ type: 'sorted', indices: [i], desc: `${array[i]} is sorted` });
+                }
+                break;
+
+            case 'insertionSort':
+                for (let i = 1; i < array.length; i++) {
+                    let key = array[i];
+                    let j = i - 1;
+                    steps.push({ type: 'pivot', indices: [i], desc: `Selecting ${key} as key` });
+                    while (j >= 0 && array[j] > key) {
+                        steps.push({ type: 'compare', indices: [j, j+1], desc: `Comparing key ${key} with ${array[j]}` });
+                        steps.push({ type: 'swap', indices: [j, j+1], desc: `Shifting ${array[j]} right` });
+                        array[j + 1] = array[j];
+                        j--;
+                    }
+                    array[j + 1] = key;
+                }
+                steps.push({ type: 'sorted', indices: Array.from(Array(array.length).keys()), desc: 'Array is sorted!' });
+                break;
+            
+            case 'mergeSort':
+                 // This is a simplified visualization of the merge part
+                function merge(arr, l, m, r) {
+                    let n1 = m - l + 1;
+                    let n2 = r - m;
+                    let L = new Array(n1);
+                    let R = new Array(n2);
+
+                    for (let i = 0; i < n1; i++) L[i] = arr[l + i];
+                    for (let j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+
+                    let i = 0, j = 0, k = l;
+                    while (i < n1 && j < n2) {
+                        steps.push({ type: 'compare', indices: [l+i, m+1+j], desc: `Comparing ${L[i]} and ${R[j]}` });
+                        if (L[i] <= R[j]) {
+                            arr[k] = L[i];
+                            i++;
+                        } else {
+                            arr[k] = R[j];
+                            j++;
+                        }
+                        steps.push({ type: 'overwrite', index: k, value: arr[k], desc: `Placing ${arr[k]} at index ${k}` });
+                        k++;
+                    }
+                    while (i < n1) {
+                        arr[k] = L[i];
+                        steps.push({ type: 'overwrite', index: k, value: arr[k], desc: `Placing ${arr[k]} at index ${k}` });
+                        i++; k++;
+                    }
+                    while (j < n2) {
+                        arr[k] = R[j];
+                        steps.push({ type: 'overwrite', index: k, value: arr[k], desc: `Placing ${arr[k]} at index ${k}` });
+                        j++; k++;
+                    }
+                }
+                function mergeSortRec(arr, l, r) {
+                    if (l >= r) return;
+                    let m = l + parseInt((r - l) / 2);
+                    mergeSortRec(arr, l, m);
+                    mergeSortRec(arr, m + 1, r);
+                    merge(arr, l, m, r);
+                }
+                mergeSortRec(array, 0, array.length - 1);
+                steps.push({ type: 'sorted', indices: Array.from(Array(array.length).keys()), desc: 'Array is sorted!' });
+                break;
+            
+             case 'quickSort':
+                function partition(arr, low, high) {
+                    let pivot = arr[high];
+                    steps.push({ type: 'pivot', indices: [high], desc: `Pivot is ${pivot}` });
+                    let i = low - 1;
+                    for (let j = low; j < high; j++) {
+                        steps.push({ type: 'compare', indices: [j, high], desc: `Comparing ${arr[j]} and pivot ${pivot}` });
+                        if (arr[j] < pivot) {
+                            i++;
+                            steps.push({ type: 'swap', indices: [i, j], desc: `Swapping ${arr[i]} and ${arr[j]}` });
+                            [arr[i], arr[j]] = [arr[j], arr[i]];
+                        }
+                    }
+                    steps.push({ type: 'swap', indices: [i + 1, high], desc: `Placing pivot` });
+                    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+                    return i + 1;
+                }
+                function quickSortRec(arr, low, high) {
+                    if (low < high) {
+                        let pi = partition(arr, low, high);
+                        steps.push({ type: 'sorted', indices: [pi], desc: `Pivot ${arr[pi]} is sorted` });
+                        quickSortRec(arr, low, pi - 1);
+                        quickSortRec(arr, pi + 1, high);
+                    }
+                }
+                quickSortRec(array, 0, array.length - 1);
+                 steps.push({ type: 'sorted', indices: Array.from(Array(array.length).keys()), desc: 'Array is sorted!' });
+                break;
+        }
+        return steps;
+    }
+
+    function createBars(algoName, arr) {
+        const container = document.getElementById(`vis-${algoName.replace('S', '-s')}`);
+        container.innerHTML = '';
+        arr.forEach((value, index) => {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = `${value * 25}px`;
+            bar.textContent = value;
+            bar.id = `bar-${algoName}-${index}`;
+            container.appendChild(bar);
+        });
+    }
+
+    function resetAnimation(algoName) {
+        if (animationState[algoName] && animationState[algoName].timeoutId) {
+            clearTimeout(animationState[algoName].timeoutId);
+        }
+        animationState[algoName] = { currentStep: 0, steps: [], timeoutId: null, isRunning: false };
+        createBars(algoName, originalArray);
+        document.getElementById(`desc-${algoName.replace('S', '-s')}`).textContent = '';
+    }
+
+    function startAnimation(algoName) {
+        if (animationState[algoName] && animationState[algoName].isRunning) return;
+        resetAnimation(algoName);
+        animationState[algoName].steps = getAlgorithmSteps(algoName, originalArray);
+        animationState[algoName].isRunning = true;
+        animateStep(algoName);
+    }
+    
+    function animateStep(algoName) {
+        const state = animationState[algoName];
+        if (!state || !state.isRunning || state.currentStep >= state.steps.length) {
+            if (state) state.isRunning = false;
+            // Final sorted state color flash
+            const bars = document.querySelectorAll(`#vis-${algoName.replace('S', '-s')} .bar`);
+            bars.forEach(bar => bar.className = 'bar bar-sorted');
+             document.getElementById(`desc-${algoName.replace('S', '-s')}`).textContent = 'Sorting Complete!';
+            return;
+        }
+        
+        const step = state.steps[state.currentStep];
+        const bars = document.querySelectorAll(`#vis-${algoName.replace('S', '-s')} .bar`);
+        
+        // Reset all bar colors, but preserve sorted ones
+        bars.forEach((bar, index) => {
+            if (!bar.classList.contains('bar-sorted')) {
+                 bar.className = 'bar';
+            }
+        });
+        
+        document.getElementById(`desc-${algoName.replace('S', '-s')}`).textContent = step.desc;
+
+        let delay = 300;
+        
+        if (step.type === 'compare') {
+            step.indices.forEach(i => bars[i] && (bars[i].className = 'bar bar-comparing'));
+        } else if (step.type === 'swap') {
+            delay = 500;
+            const [i, j] = step.indices;
+            if (bars[i] && bars[j]) {
+                bars[i].className = 'bar bar-swap';
+                bars[j].className = 'bar bar-swap';
+
+                // Swap heights and text content
+                const tempHeight = bars[i].style.height;
+                const tempText = bars[i].textContent;
+                bars[i].style.height = bars[j].style.height;
+                bars[i].textContent = bars[j].textContent;
+                bars[j].style.height = tempHeight;
+                bars[j].textContent = tempText;
+            }
+        } else if (step.type === 'sorted') {
+             step.indices.forEach(i => bars[i] && (bars[i].className = 'bar bar-sorted'));
+        } else if (step.type === 'pivot') {
+             step.indices.forEach(i => bars[i] && (bars[i].className = 'bar bar-pivot'));
+        } else if (step.type === 'overwrite') {
+            if(bars[step.index]) {
+                bars[step.index].style.height = `${step.value * 25}px`;
+                bars[step.index].textContent = step.value;
+                bars[step.index].className = 'bar bar-swap';
+            }
+        }
+
+        state.currentStep++;
+        state.timeoutId = setTimeout(() => animateStep(algoName), delay);
+    }
+
+    // Initialize all visualizations on load and set up nav links
+    document.addEventListener('DOMContentLoaded', () => {
+        // Setup smooth scrolling for nav links
+        document.querySelectorAll('header nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 80; // Height of sticky header
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Initialize visualizations
+        resetAnimation('bubbleSort');
+        resetAnimation('selectionSort');
+        resetAnimation('insertionSort');
+        resetAnimation('mergeSort');
+        resetAnimation('quickSort');
+    });
+
+    // --- UTILITY FUNCTIONS ---
+    function copyCode(elementId) {
+        const codeElement = document.getElementById(elementId);
+        const text = codeElement.innerText;
+        
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+
+        // Optional: show a confirmation message
+        alert('Code copied to clipboard!');
+    }
+</script>
+
+</body>
+</html>
+
